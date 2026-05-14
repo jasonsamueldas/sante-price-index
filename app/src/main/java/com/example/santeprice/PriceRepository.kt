@@ -32,7 +32,7 @@ object PriceRepository {
     // data.gov.in Agmarknet API
     // Register at https://data.gov.in to get a free API key
     // Replace YOUR_API_KEY below with your actual key
-    private const val API_KEY = "579b464db66ec23bdd0000014d4d08291e04460f6e49bebe81c3df76"
+    private const val API_KEY = "WRITE YOUR API KEY HERE"
     private const val BASE_URL = "https://api.data.gov.in/resource/9ef84268-d588-465a-a308-a864a43d0070"
 
     /**
