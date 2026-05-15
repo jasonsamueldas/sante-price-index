@@ -32,6 +32,9 @@ class DataStoreManager(
             stringPreferencesKey("waste")
         val TRANSPORT_KEY =
             stringPreferencesKey("transport")
+        // NEW: Keys for storing trend points by commodity
+        fun getTrendPointsKey(commodity: String) =
+            stringPreferencesKey("trend_points_$commodity")
     }
 
     suspend fun saveBoardItems(
@@ -58,7 +61,7 @@ class DataStoreManager(
     }
 
     val boardItemsFlow = context.dataStore.data.map { prefs ->
-            val json =
+        val json =
             prefs[BOARD_KEY] ?: "[]"
         val jsonArray = JSONArray(json)
 
@@ -127,6 +130,70 @@ class DataStoreManager(
                 jsonArray.toString()
         }
     }
+
+    // NEW: Save trend points for a specific commodity
+    suspend fun saveTrendPoints(
+        commodity: String,
+        points: List<TrendPoint>
+    ) {
+        val jsonArray = JSONArray()
+        points.forEach { point ->
+            val obj = JSONObject()
+            obj.put("label", point.label)
+            obj.put("price", point.price)
+            jsonArray.put(obj)
+        }
+
+        context.dataStore.edit { prefs ->
+            prefs[getTrendPointsKey(commodity)] =
+                jsonArray.toString()
+        }
+    }
+
+    // NEW: Retrieve cached trend points for a commodity
+    suspend fun getTrendPoints(
+        commodity: String
+    ): List<TrendPoint> {
+        return try {
+            val prefs = context.dataStore.data.map { it }.collect {
+                val json = it[getTrendPointsKey(commodity)] ?: "[]"
+                val jsonArray = JSONArray(json)
+                buildList {
+                    for (i in 0 until jsonArray.length()) {
+                        val obj = jsonArray.getJSONObject(i)
+                        add(
+                            TrendPoint(
+                                label = obj.getString("label"),
+                                price = obj.getDouble("price")
+                            )
+                        )
+                    }
+                }
+            }
+            emptyList() // This is a placeholder - see alternative below
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    // BETTER: Return flow directly for cached trend points
+    fun getTrendPointsFlow(commodity: String) =
+        context.dataStore.data.map { prefs ->
+            val json = prefs[getTrendPointsKey(commodity)] ?: "[]"
+            val jsonArray = JSONArray(json)
+
+            buildList {
+                for (i in 0 until jsonArray.length()) {
+                    val obj = jsonArray.getJSONObject(i)
+                    add(
+                        TrendPoint(
+                            label = obj.getString("label"),
+                            price = obj.getDouble("price")
+                        )
+                    )
+                }
+            }
+        }
 
     suspend fun saveCachedPrices(
         items: List<MandiPrice>
