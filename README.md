@@ -1,31 +1,40 @@
 # Sante Price Index
 
-A modern Android application built with Kotlin and Jetpack Compose that helps users track product prices, monitor trends, and analyze price changes over time using Firebase as the backend.
+An Android application built with Kotlin and Jetpack Compose that tracks and visualizes product price trends using live data from the Indian Government Open Data Platform (`data.gov.in`).
+
+The app allows users to monitor commodity prices, analyze historical trends, and access cached data even when offline.
 
 ## Features
 
-- Real-time product price tracking
-- Historical price trend visualization
-- Offline support with cached data
-- Firebase Realtime Database integration
-- Firebase Authentication support
+- Live commodity price tracking
+- Data fetched from `data.gov.in`
+- Product trend visualization
+- Historical price analysis
+- Offline caching support
 - Modern Jetpack Compose UI
 - Product watchlist / tracker
-- Price trend graphs
-- Responsive and clean interface
-- Persistent local storage for offline access
+- Responsive Material Design 3 interface
+- Persistent local storage for offline usage
 
 ## Tech Stack
 
 - Kotlin
 - Jetpack Compose
-- Firebase Realtime Database
-- Firebase Authentication
-- Android Studio
 - Material Design 3
 - Coroutines
 - ViewModel
-- State Management
+- Retrofit / HTTP Networking
+- JSON Parsing
+- Local Storage Caching
+- Android Studio
+
+## Data Source
+
+This project uses publicly available commodity price data from:
+
+- https://data.gov.in
+
+The application fetches and processes government-provided datasets to display pricing trends and market information.
 
 ## Screenshots
 
@@ -50,12 +59,12 @@ Sante-Price-Index/
 
 ### Prerequisites
 
-Make sure you have the following installed:
+Make sure you have:
 
 - Android Studio
 - Android SDK
-- Kotlin
-- Firebase Project
+- Internet connection for live data
+- API key from `data.gov.in`
 
 ## Installation
 
@@ -69,60 +78,67 @@ git clone https://github.com/jasonsamueldas/sante-price-index.git
 
 Open the project folder in Android Studio.
 
-### 3. Connect Firebase
+### 3. Add API Key
 
-1. Go to Firebase Console
-2. Create a new Firebase project
-3. Add an Android app
-4. Download the `google-services.json` file
-5. Place it inside:
+Get an API key from:
 
 ```text
-app/google-services.json
+https://data.gov.in
+```
+
+Add your API key in the appropriate configuration file or constant inside the project.
+
+Example:
+
+```kotlin
+const val API_KEY = "YOUR_API_KEY"
 ```
 
 ### 4. Sync Gradle
 
-Allow Android Studio to sync all dependencies.
+Allow Android Studio to download and sync all dependencies.
 
-### 5. Run the App
+### 5. Run the Application
 
-Connect an emulator or Android device and click:
+Connect an Android device or emulator and click:
 
 ```text
 Run ▶
 ```
 
-## Firebase Database Structure
+## Example API Response
 
-Example structure:
+Example commodity price data:
 
 ```json
 {
-  "products": {
-    "Milk": {
-      "2026-05-01": 48,
-      "2026-05-02": 50,
-      "2026-05-03": 49
+  "records": [
+    {
+      "commodity": "Rice",
+      "state": "Karnataka",
+      "market": "Bangalore",
+      "price": "65"
     },
-    "Rice": {
-      "2026-05-01": 65,
-      "2026-05-02": 67
+    {
+      "commodity": "Milk",
+      "state": "Karnataka",
+      "market": "Bangalore",
+      "price": "48"
     }
-  }
+  ]
 }
 ```
 
 ## Offline Support
 
-The application supports offline usage by caching previously fetched product and trend data locally.
+The app stores previously fetched data locally so users can continue viewing:
 
-Features include:
+- Saved products
+- Previous prices
+- Trend graphs
+- Cached market data
 
-- Cached product tracker
-- Offline trend viewing
-- Retained previous prices without internet
-- Firebase offline persistence
+even without an internet connection.
 
 ## Build APK
 
@@ -140,32 +156,34 @@ app/build/outputs/apk/
 
 ## Future Improvements
 
-- Push notifications for price drops
-- Advanced analytics dashboard
-- Multi-user collaboration
-- Product categories
-- Dark mode improvements
-- Export reports to PDF/CSV
-- AI-based price prediction
+- Smart price alerts
+- Price prediction using ML
+- Advanced filtering and sorting
+- Multiple chart types
+- Export data to CSV/PDF
+- User accounts and cloud sync
+- Regional analytics dashboard
 
 ## Contributing
 
 Contributions are welcome.
 
+### Steps
+
 1. Fork the repository
-2. Create a new branch
+2. Create a feature branch
 
 ```bash
 git checkout -b feature-name
 ```
 
-3. Commit changes
+3. Commit your changes
 
 ```bash
 git commit -m "Added new feature"
 ```
 
-4. Push to GitHub
+4. Push the branch
 
 ```bash
 git push origin feature-name
@@ -185,4 +203,4 @@ GitHub: [jasonsamueldas](https://github.com/jasonsamueldas)
 
 ## Repository
 
-[Sante Price Index Repository](https://github.com/jasonsamueldas/sante-price-index?utm_source=chatgpt.com)
+https://github.com/jasonsamueldas/sante-price-index
